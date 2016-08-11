@@ -1,0 +1,35 @@
+Use AS-IS... demo scripts for PBS Professional Checkpoint Restart
+
+ - mom_priv/config
+   - introduces a few arguments ($restart_transmogrify, $restart_background, $action checkpoint, $action checkpoint_abort, and $action restart), which you should refer to the docs for details
+ - checkpoint_abort.sh
+   - script for when job is check pointed via qhold or scheduler preemption
+   - there is a "debug" file dropped in /tmp, might be useful to "watch" this
+ - checkpoint.sh
+   - script for when job is periodically checkpointed (qsub -c [c=X or w=X]) 
+   - there is a "debug" file dropped in /tmp, might be useful to "watch" this
+ - restart.sh
+   - script for when job is restarted via qrls
+   - there is a "debug" file dropped in /tmp, might be useful to "watch" this
+ - checkpointable_app.sh
+   - User script to be submitted via qsub
+
+Steps to demo:
+As root
+  1. Update the i$PBS_HOME/mom_priv/config with the contents of mom_priv/config.example minding the PATHs to the scripts
+  2. Copy the checkpoint_abort.sh, checkpoint.sh, and restart.sh into mom_priv
+  3. Chmod 755 the new scripts
+  4. Restart PBS MOM
+
+As user
+  1. qsub checkpointable_app.sh
+  2. tail -f ${PBS_JOBDIR}/${PBS_JOBID}.OU
+     - PBS_JOBDIR can be determined by qstat -f | grep jobdir
+
+In another terminal window, as root or the user.
+  1. qhold $PBS_JOBID
+     - watch the output of the tail in the user's window
+  2. qrls $PBS_JOBID
+     - again watch the output of the tail
+  3. Allow the job to run, and you will see the period checkpoint kick in, too. 
+

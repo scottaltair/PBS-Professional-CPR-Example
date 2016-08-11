@@ -1,0 +1,10 @@
+#!/bin/sh
+
+tarball="packages/pbs_cpr_demo-`date \"+%Y%m%d\"`.tar.gz"
+
+if [[ -f $tarball ]] ; then
+    echo "$tarball EXISTS!"
+    exit -1
+else
+    gnu_tar -zcvf $tarball --owner=0 --group=0 --numeric-owner pbs_cpr_demo
+fi

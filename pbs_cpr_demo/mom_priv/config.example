@@ -1,0 +1,5 @@
+$restart_transmogrify true
+$restart_background true
+$action checkpoint 60 !/var/spool/PBS/mom_priv/checkpoint.sh %path
+$action checkpoint_abort 60 !/var/spool/PBS/mom_priv/checkpoint_abort.sh %path
+$action restart 60 !/var/spool/PBS/mom_priv/restart.sh %path
